@@ -6,8 +6,12 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import csv
 import time
+from pyvirtualdisplay import Display
 
-driver = webdriver.Chrome('./chromedriver.exe')
+display = Display(visible=0, size=(1920, 1080))
+display.start()
+
+driver = webdriver.Chrome('./chromedriver')
 driver.implicitly_wait(1)
 wait = WebDriverWait(driver, 10)
 
