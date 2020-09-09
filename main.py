@@ -7,7 +7,7 @@ import pandas as pd
 import csv
 import time
 
-driver = webdriver.Chrome('./chromedriver')
+driver = webdriver.Chrome('./chromedriver.exe')
 driver.implicitly_wait(1)
 wait = WebDriverWait(driver, 10)
 
