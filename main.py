@@ -34,7 +34,7 @@ start = time.time()
 # 반복 시작
 page = 1
 # 5318
-for i in range(2, 4, 1):
+for i in range(2, 5318, 1):
     # 확인하기 위한 페이지 출력
     print("page : ", page)
     # 해당 페이지 기업 리스트 20개 탐색 시작
