@@ -13,7 +13,6 @@ display.start()
 
 driver = webdriver.Chrome('./chromedriver')
 driver.implicitly_wait(1)
-wait = WebDriverWait(driver, 10)
 
 result = pd.DataFrame(columns=['username', 'phone', 'name', 'address', 'career', 'info_company', 'info_biz', 'key'])
 result.to_csv('result.csv', encoding='CP949')
@@ -28,19 +27,21 @@ driver.find_element_by_class_name('btn-common').click()
 
 # 기업리스트 페이지로 이동
 driver.get('https://www.makervil.com/user/company/viewCompanyListMain.do')
+driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[2]/ul/li[6]/a').click()
 
 start = time.time()
 
 # 반복 시작
-page = 1
+page = 6
+tmp = 4
 # 5318
 for i in range(2, 5318, 1):
     # 확인하기 위한 페이지 출력
     print("page : ", page)
     # 해당 페이지 기업 리스트 20개 탐색 시작
     for j in range(1, 21, 1):
+        time.sleep(0.5)
         list_xpath = '//*[@id="content"]/div[1]/div[1]/ul/li[' + str(j) + ']/div[2]'
-        element = wait.until(EC.element_to_be_clickable((By.XPATH, list_xpath)))
         driver.find_element_by_xpath(list_xpath).click()
 
         # 확인하기 위한 파트너 번째 수
@@ -49,7 +50,7 @@ for i in range(2, 5318, 1):
         print(driver.current_url)
 
         # 데이터 로딩까지 대기
-        element = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '#go-info > ul > li:nth-child(5) > span:nth-child(2)')))
+        time.sleep(0.5)
         
         # 해당 링크로 들어와서 크롤링
         html = driver.page_source
@@ -82,7 +83,12 @@ for i in range(2, 5318, 1):
         driver.back()
 
     # 20개의 리스트가 끝나면 다음 페이지로 이동
-    driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[2]/ul/li['+ str(i) +']/a').click()
+    driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[2]/ul/li['+ str(tmp) +']/a').click()
+    if tmp == 8:
+        tmp = 4
+    else:
+        tmp += 1
+
     page += 1
 
 print(time.time() - start)
