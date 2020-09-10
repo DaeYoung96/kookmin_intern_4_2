@@ -15,8 +15,8 @@ driver = webdriver.Chrome('./chromedriver')
 driver.implicitly_wait(1)
 
 result = pd.DataFrame(columns=['username', 'phone', 'name', 'address', 'career', 'info_company', 'info_biz', 'key'])
-result.to_csv('result.csv', encoding='CP949')
-f = open('result.csv', 'w', encoding='CP949', newline='')
+result.to_csv('result 01.csv', encoding='CP949')
+f = open('result 01.csv', 'w', encoding='CP949', newline='')
 wr = csv.writer(f)
 wr.writerow(['username', 'phone', 'name', 'address', 'career', 'info_company', 'info_biz', 'key'])
 # 로그인
@@ -26,21 +26,24 @@ driver.find_element_by_id('input_password').send_keys('@bolt123')
 driver.find_element_by_class_name('btn-common').click()
 
 # 기업리스트 페이지로 이동
-driver.get('https://www.makervil.com/user/company/viewCompanyListMain.do')
-driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[2]/ul/li[6]/a').click()
+driver.get('https://www.makervil.com/user/company/viewCompanyListMain.do?CompanySearch=&area=30')
+# 6페이지부터 시작
+# driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[2]/ul/li[6]/a').click()
 
 start = time.time()
 
 # 반복 시작
-page = 6
-tmp = 4
+page = 1
+tmp = 2
+flag = False
+cnt = 0
 # 5318
-for i in range(2, 5318, 1):
+for i in range(0, 17, 1):
     # 확인하기 위한 페이지 출력
     print("page : ", page)
     # 해당 페이지 기업 리스트 20개 탐색 시작
     for j in range(1, 21, 1):
-        time.sleep(0.5)
+        driver.implicitly_wait(3)
         list_xpath = '//*[@id="content"]/div[1]/div[1]/ul/li[' + str(j) + ']/div[2]'
         driver.find_element_by_xpath(list_xpath).click()
 
@@ -84,11 +87,26 @@ for i in range(2, 5318, 1):
 
     # 20개의 리스트가 끝나면 다음 페이지로 이동
     driver.find_element_by_xpath('//*[@id="content"]/div[1]/div[2]/ul/li['+ str(tmp) +']/a').click()
-    if tmp == 8:
-        tmp = 4
-    else:
+    
+    if flag == False:
         tmp += 1
 
+    if flag == True:
+        if tmp == 8:
+            tmp = 4
+            cnt += 1
+        else:
+            tmp += 1
+
+    if page == 5:
+        tmp = 4
+        flag = True
+        cnt += 1
+
+
+
     page += 1
+    print("tmp : ", tmp)
 
 print(time.time() - start)
+print(cnt)
